@@ -1,11 +1,3 @@
-import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QTimer
-import numpy as np
-import csv
-import pandas as pd
-
-#parameters customizing plot
 x_axis_size = 250 # sets how many data points are kept for plotting
 time_between_updates = 1 # sets how often the plots update function is called, in ms
 window = 1
@@ -34,15 +26,15 @@ plots = []
 colorList = ["#fa9189", "#fcae7c",
                       "#ffe699", "#f9ffb5", "#b3f5bc", "#d6f6ff", "#e2cbf7", "#d1bdf1"]
 plot = '1'
-plot_position_iterator = 0 # used to determine when to create new row or column
+plot_position_iterator = 1 # used to determine when to create new row or column
 for vector in sensor_vectors:
-    plot = win.addPlot(title=f"Vector Plot {plot}")
+    plot = win.addPlot(title=f"Channel {plot_position_iterator}")
     plot.setXRange(0,x_axis_size)
-    curve = plot.plot(vector, pen=colorList[plot_position_iterator])
+    curve = plot.plot(vector, pen=colorList[plot_position_iterator - 1])
     plots.append({'plot': plot, 'curve': curve})
-    if plot_position_iterator % 2 == 1:
+    if plot_position_iterator % 2 == 0:
         win.nextRow()
-    elif plot_position_iterator % 2 == 0:
+    elif plot_position_iterator % 2 == 1:
         win.nextCol()
     plot_position_iterator += 1
 
@@ -72,7 +64,7 @@ def update_plots():
             sensor_vectors[i][-1] = csv_data[data_index][i]  # add new data point to end
             plots[i]['curve'].setData(vector) # update plot
     data_index += 1
-    if(data_index == csv_data.size): #return to start of csv file
+    if(data_index == (csv_data.size / 8) - 1): #return to start of csv file
         data_index = 0
 
 # Create a QTimer to periodically update the plots (e.g., every 100 ms)
