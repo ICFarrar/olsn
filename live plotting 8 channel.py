@@ -95,7 +95,4 @@ with concurrent.futures.ThreadPoolExecutor() as executor:
     # Start the PyQtGraph application event loop
     app.exec_()
 
-# Start the PyQtGraph application event loop
-app.exec_()
-print('test commit')
 
